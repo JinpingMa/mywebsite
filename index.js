@@ -1,7 +1,44 @@
 const express = require('express');
+const socket = require('socket.io');
+
+//配置服务器
 const app = express();
+const server = app.listen(3000, function () {
+	const host = server.address().address;
+	const port = server.address().port;
+	console.log('Example app listening at http://%s:%s', host, port);
+});
+
+//Static files
+app.use(express.static('public'));
+
+//socket setup
+const io = socket(server);
+
+io.on('connection', function(client){
+  console.log('made socket connection and client id is: ', client.id);
+  const msg = {};
+  msg.name = client.id;
+  msg.message = '上线';
+  io.sockets.emit('chat', msg);
+  //event chat
+  client.on('chat', function (data) {
+    io.sockets.emit('chat', data);
+  });
+
+  //event disconnect
+    client.on('disconnect', function () {
+      const disconnectMsg = {};
+      disconnectMsg.name=client.id;
+      disconnectMsg.message = '下线'
+        console.log('client ' +client.id + ' disconnect');
+        io.sockets.emit('chat',disconnectMsg)
+	});
+});
+
+
 app.all('*',function (req, res, next) {
-  //cors
+  //set cors response header
   res.header('Access-Control-Allow-Origin', 'http://127.0.0.1:5500');
   res.header('Access-Control-Allow-Header', 'X-Requested-With');
   res.header('Access-Control-Allow-Methods', 'PUT,POST,GET,DELETE,UPDATE');
@@ -36,9 +73,3 @@ app.get('/jsonp', function (req, res) {
 
 
 
-//配置服务端口
-var server = app.listen(3000, function () {
-  var host = server.address().address;
-  var port = server.address().port;
-  console.log('Example app listening at http://%s:%s', host, port);
-})
