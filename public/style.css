@@ -8,7 +8,7 @@ body {
 .container {
     padding:10px 20px
 }
-#output {
+#chat-window {
     height: 60vh;
     width: 60vh;
     background-color: #eee;
@@ -16,7 +16,20 @@ body {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-    border:1px solid #999;
+    border: 1px solid #999;
+    border-bottom: none;
+    /*padding: 10px;*/
+}
+#output p{
+    margin: 0 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid #999;
+}
+#output p strong {
+    color: mediumblue;
+}
+#feedback{
+margin: 0 10px;
 }
 
 #message, #send, #name{
@@ -29,6 +42,19 @@ body {
     border:1px solid #999;
     outline: none;
 }
+#message,#name{
+    border-bottom:none;
+}
+#message:focus, #name:focus{
+    border-color: blue;
+}
+#name:focus + #message{
+    border-top-color:blue;
+}
+#message:focus{
+    border-bottom:1px solid blue;
+}
+
 #send  {
     background-color: blue;
     color: #fff;

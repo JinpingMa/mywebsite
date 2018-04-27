@@ -5,7 +5,8 @@ const socket = io.connect("http://localhost:3000");
 const message = document.querySelector('#message'),
 	name = document.querySelector('#name'),
 	sendBtn = document.getElementById('send'),
-	output = document.getElementById('output');
+	output = document.getElementById('output'),
+	feedback = document.getElementById('feedback');
 
 message.onfocus = function(){
 	message.className = '';
@@ -28,11 +29,20 @@ sendBtn.addEventListener('click', function(){
 	}
 });
 
+message.addEventListener('keypress', function () {
+	socket.emit('typing', name.value);
+});
+
 //listen for events
 socket.on('chat', function (data) {
 	//html tag encode
 	console.log(htmlEncode(data.message));
-	output.innerHTML +='<p><strong>' + htmlEncode(data.name) +':</strong>'+htmlEncode(data.message)+'</p>';
+	feedback.innerHTML = '';
+	output.innerHTML +='<p><strong>' + htmlEncode(data.name) +':</strong>'+data.message+'</p>';
+});
+
+socket.on('typing',function (data) {
+	feedback.innerHTML = '<p><em>'+data+' is typing a message...</em></p>';
 });
 
 // HTML ENCODE

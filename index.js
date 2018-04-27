@@ -20,17 +20,21 @@ io.on('connection', function(client){
   const msg = {};
   msg.name = client.id;
   msg.message = '上线';
-  io.sockets.emit('chat', msg);
+  io.sockets.emit('message', msg);
   //event chat
   client.on('chat', function (data) {
     io.sockets.emit('chat', data);
+  });
+
+  client.on('typing', function (data) {
+      client.broadcast.emit('typing',data);
   });
 
   //event disconnect
     client.on('disconnect', function () {
       const disconnectMsg = {};
       disconnectMsg.name=client.id;
-      disconnectMsg.message = '下线'
+      disconnectMsg.message = '下线';
         console.log('client ' +client.id + ' disconnect');
         io.sockets.emit('chat',disconnectMsg)
 	});
@@ -58,7 +62,7 @@ const datas = [
   name:'item2',
     value:29
   }
-]
+];
 //api
 app.get('/data', function (req, res) {
   res.status(200);
