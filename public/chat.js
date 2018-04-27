@@ -9,13 +9,12 @@ const message = document.querySelector('#message'),
 
 message.onfocus = function(){
 	message.className = '';
-}
+};
 name.onfocus = function(){
 	name.className = '';
-}
+};
 //emit events
 sendBtn.addEventListener('click', function(){
-	console.log('发送消息');
 	const mLen = message.value.length;
 	const nLen = name.value.length;
 	if(nLen && mLen){
@@ -32,5 +31,34 @@ sendBtn.addEventListener('click', function(){
 //listen for events
 socket.on('chat', function (data) {
 	//html tag encode
-	output.innerHTML +='<p><strong>' + data.name +':</strong>'+data.message+'</p>';
+	console.log(htmlEncode(data.message));
+	output.innerHTML +='<p><strong>' + htmlEncode(data.name) +':</strong>'+htmlEncode(data.message)+'</p>';
 });
+
+// HTML ENCODE
+function htmlEncode(str) {
+	// console.log(str);
+	let s = '';
+	if(str.length === 0) return s;
+	s = str.replace(/&/g, '&amp;');
+	s = s.replace(/</g, '&lt;');
+	s = s.replace(/>/g, '&gt;');
+	s = s.replace(/ /g, '&nbsp;');
+	s = s.replace(/'/g, '&#39;');
+	s = s.replace(/"/g, '&quot;');
+	s = s.replace(/\n/g, '<br>');
+	return s;
+	// console.log(s);
+}
+function htmlDecode(str) {
+	let s = '';
+	if(str.length === 0) return s;
+	s = str.replace(/&amp;/g, '&');
+	s = s.replace(/&lt;/g, '<');
+	s = s.replace(/&gt;/g, '>');
+	s = s.replace(/&nbsp;/g, ' ');
+	s = s.replace(/&#39;/g, '\'');
+	s = s.replace(/&quot;/g, '\"');
+	s = s.replace(/<br>/g, '\n');
+	return s;
+}
