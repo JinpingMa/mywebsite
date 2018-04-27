@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>聊天室</title>
+    <link href="style.css" rel="stylesheet" />
+    <script src="https://cdn.bootcss.com/socket.io/2.1.0/socket.io.js"></script>
+</head>
+<body>
+<div class="container">
+    <div id="mario-chat">
+        <div id="chat-window">
+            <div id="output"></div>
+        </div>
+    </div>
+    <input id="name" type="text" placeholder="Name"/>
+    <input id="message" type="text" placeholder="Message"/>
+    <button id="send">Send</button>
+</div>
+<script src="chat.js"></script>
+<!--<script>-->
+	<!--//connect to server-->
+	<!--const socket = io.connect("http://localhost:3000");-->
+
+	<!--//query DOM-->
+	<!--const message = document.querySelector('#message'),-->
+		<!--name = document.querySelector('#name'),-->
+		<!--sendBtn = document.getElementById('send'),-->
+		<!--output = document.getElementById('output');-->
+
+	<!--//emit events-->
+	<!--sendBtn.addEventListener('click', function(){-->
+		<!--console.log('发送消息')-->
+		<!--socket.emit('chat',{-->
+			<!--message: message.value,-->
+			<!--name: name.value-->
+		<!--});-->
+	<!--});-->
+
+	<!--//listen for events-->
+	<!--socket.on('chat', function (data) {-->
+		<!--output.innerHTML +='<p><strong>' + data.name +':</strong>'+data.message+'</p>';-->
+	<!--});-->
+
+<!--</script>-->
+</body>
+</html>

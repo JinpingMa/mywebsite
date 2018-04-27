@@ -1,0 +1,40 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+body {
+    font-family: sans-serif;
+}
+.container {
+    padding:10px 20px
+}
+#output {
+    height: 60vh;
+    width: 60vh;
+    background-color: #eee;
+    overflow-y: auto;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border:1px solid #999;
+}
+
+#message, #send, #name{
+    padding:10px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    display: block;
+    width:60vh;
+    border:1px solid #999;
+    outline: none;
+}
+#send  {
+    background-color: blue;
+    color: #fff;
+    font-size: 14px;
+    outline: none;
+}
+.no-empty {
+    border: 1px solid red !important;
+}
