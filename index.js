@@ -12,6 +12,15 @@ const server = app.listen(3000, function () {
 //Static files
 app.use(express.static('public'));
 
+//middleware
+app.use(function (req, res, next) {
+  //Jump to mobile web site when using mobile phone to achieve responsive effect
+  if(req.headers['user-agent'].match(/iPhone|iPond|Android|iPad/i)) {
+    res.redirect('http://www.baidu.com');
+  }
+  next();
+});
+
 //socket setup
 const io = socket(server);
 
@@ -42,6 +51,7 @@ io.on('connection', function(client){
 
 
 app.all('*',function (req, res, next) {
+
   //set cors response header
   res.header('Access-Control-Allow-Origin', 'http://127.0.0.1:5500');
   res.header('Access-Control-Allow-Header', 'X-Requested-With');
