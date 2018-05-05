@@ -1,24 +1,45 @@
 const express = require('express');
 const socket = require('socket.io');
-
+const serveStatic = require('serve-static');
+const path = require('path');
 //配置服务器
 const app = express();
-const server = app.listen(3000, function () {
-	const host = server.address().address;
-	const port = server.address().port;
-	console.log('Example app listening at http://%s:%s', host, port);
-});
-
-//Static files
-app.use(express.static('public'));
 
 //middleware
 app.use(function (req, res, next) {
   //Jump to mobile web site when using mobile phone to achieve responsive effect
   if(req.headers['user-agent'].match(/iPhone|iPond|Android|iPad/i)) {
     res.redirect('http://www.baidu.com');
+  } else {
+    next();
   }
-  next();
+});
+
+app.use(function (req, res, next) {
+  res.setHeader('X-Powered-By', 'James');
+  res.setHeader('Server', 'Jinping');
+  res.setHeader('FUck', JSON.stringify({'a': 2233}));
+  next()
+});
+
+// //Static files,express native method
+// app.use(express.static('public', {
+//   'maxAge': '10s'
+// }));
+function setCustomCacheControl(res, path){
+  if(serveStatic.mime.lookup(path) === 'text/html'){
+    res.setHeader('Cache-Control', 'public,max-age=0');
+  }
+}
+app.use(serveStatic(path.join(__dirname, 'public'), {
+  'maxAge': '100s',
+  'setHeaders': setCustomCacheControl
+}));
+
+const server = app.listen(3000, function () {
+	const host = server.address().address;
+	const port = server.address().port;
+	console.log('Example app listening at http://%s:%s', host, port);
 });
 
 //socket setup
@@ -52,16 +73,16 @@ io.on('connection', function(client){
 
 app.all('*',function (req, res, next) {
 
-  //set cors response header
-  res.header('Access-Control-Allow-Origin', 'http://127.0.0.1:5500');
-  res.header('Access-Control-Allow-Header', 'X-Requested-With');
-  res.header('Access-Control-Allow-Methods', 'PUT,POST,GET,DELETE,UPDATE');
-  //with credentials
-  res.header('Access-Control-Allow-Credentials', 'true');
-  res.header('X-Powered-By','3.2.1');
-  res.header('Content-Type','application/json;charset=utf-8');
-  res.cookie('name', 'tobi', { expires: new Date(Date.now() + 900000), httpOnly: true});
-  next();
+    //set cors response header
+    res.header('Access-Control-Allow-Origin', 'http://127.0.0.1:5500');
+    res.header('Access-Control-Allow-Header', 'X-Requested-With');
+    res.header('Access-Control-Allow-Methods', 'PUT,POST,GET,DELETE,UPDATE');
+    //with credentials
+    res.header('Access-Control-Allow-Credentials', 'true');
+    res.header('X-Powered-By', 'hello');
+    res.header('Content-Type', 'application/json;charset=utf-8');
+    res.cookie('name', 'tobi', {expires: new Date(Date.now() + 900000), httpOnly: true});
+    next();
 });
 
 const datas = [
