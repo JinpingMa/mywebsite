@@ -1,5 +1,6 @@
 //connect to server
-const socket = io.connect("http://localhost:3000");
+const baseUrl = "https://192.168.60.239:8443";
+const socket = io.connect(baseUrl);
 
 //query DOM
 const message = document.querySelector('#message'),

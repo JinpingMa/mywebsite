@@ -2,6 +2,10 @@ const express = require('express');
 const socket = require('socket.io');
 const serveStatic = require('serve-static');
 const path = require('path');
+
+const fs = require('fs');
+const https = require('https');
+
 //配置服务器
 const app = express();
 
@@ -31,16 +35,29 @@ function setCustomCacheControl(res, path){
     res.setHeader('Cache-Control', 'public,max-age=0');
   }
 }
+
 app.use(serveStatic(path.join(__dirname, 'public'), {
   'maxAge': '100s',
   'setHeaders': setCustomCacheControl
 }));
 
-const server = app.listen(3000, function () {
-	const host = server.address().address;
-	const port = server.address().port;
-	console.log('Example app listening at http://%s:%s', host, port);
-});
+const httpsOptions = {
+  cert: fs.readFileSync(path.join(__dirname, 'server/ssl', 'server.crt')),
+  key: fs.readFileSync(path.join(__dirname, 'server/ssl', 'server.key'))
+};
+
+const server = https.createServer(httpsOptions, app)
+  .listen(8443, function () {
+    const host = server.address().address;
+    const port = server.address().port;
+    console.log('Example app listening at http://%s:%s', host, port);
+  });
+
+// const server = app.listen(3000, function () {
+// 	const host = server.address().address;
+// 	const port = server.address().port;
+// 	console.log('Example app listening at http://%s:%s', host, port);
+// });
 
 //socket setup
 const io = socket(server);
