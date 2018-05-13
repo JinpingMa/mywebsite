@@ -1,5 +1,5 @@
 //connect to server
-const baseUrl = "https://192.168.60.239:8443";
+const baseUrl = 'https://192.168.60.239:8443';
 const socket = io.connect(baseUrl);
 
 //query DOM
@@ -9,24 +9,24 @@ const message = document.querySelector('#message'),
 	output = document.getElementById('output'),
 	feedback = document.getElementById('feedback');
 
-message.onfocus = function(){
+message.onfocus = function () {
 	message.className = '';
 };
-name.onfocus = function(){
+name.onfocus = function () {
 	name.className = '';
 };
 //emit events
-sendBtn.addEventListener('click', function(){
+sendBtn.addEventListener('click', function () {
 	const mLen = message.value.length;
 	const nLen = name.value.length;
-	if(nLen && mLen){
-		socket.emit('chat',{
+	if (nLen && mLen) {
+		socket.emit('chat', {
 			message: message.value,
 			name: name.value
 		});
 	} else {
-		message.className = mLen? '': 'no-empty';
-		name.className = nLen? '' : 'no-empty';
+		message.className = mLen ? '' : 'no-empty';
+		name.className = nLen ? '' : 'no-empty';
 	}
 });
 
@@ -39,18 +39,18 @@ socket.on('chat', function (data) {
 	//html tag encode
 	console.log(htmlEncode(data.message));
 	feedback.innerHTML = '';
-	output.innerHTML +='<p><strong>' + htmlEncode(data.name) +':</strong>'+data.message+'</p>';
+	output.innerHTML += '<p><strong>' + htmlEncode(data.name) + ':</strong>' + data.message + '</p>';
 });
 
-socket.on('typing',function (data) {
-	feedback.innerHTML = '<p><em>'+data+' is typing a message...</em></p>';
+socket.on('typing', function (data) {
+	feedback.innerHTML = '<p><em>' + data + ' is typing a message...</em></p>';
 });
 
 // HTML ENCODE
 function htmlEncode(str) {
 	// console.log(str);
 	let s = '';
-	if(str.length === 0) return s;
+	if (str.length === 0) return s;
 	s = str.replace(/&/g, '&amp;');
 	s = s.replace(/</g, '&lt;');
 	s = s.replace(/>/g, '&gt;');
@@ -61,9 +61,10 @@ function htmlEncode(str) {
 	return s;
 	// console.log(s);
 }
+
 function htmlDecode(str) {
 	let s = '';
-	if(str.length === 0) return s;
+	if (str.length === 0) return s;
 	s = str.replace(/&amp;/g, '&');
 	s = s.replace(/&lt;/g, '<');
 	s = s.replace(/&gt;/g, '>');
